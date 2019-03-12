@@ -1,4 +1,5 @@
 args <- commandArgs(TRUE)
+args <- c("100", "docword.nytimes", "1", "0")
 source("preprocessing_items_terminal.R")
 
 library("profvis") 
@@ -132,7 +133,7 @@ while (!all_leafs) {
                         cat(paste0(level,"\t",br,"\t",vv,"\t",en$toc - en$tic,"\t",(pryr::mem_used())/10^6), file=logFile, append=TRUE, sep = "\n")
                       }
                     }
-                  
+                    
                     #result1 = list("permat"= permat, "persim" = persim,"sumper" = sumper,"sumper2" = sumper2, "leaf2" = leaf2)
                     #result1 = list("leaf2" = leaf2)
                     if (!leaf2) {
@@ -312,7 +313,7 @@ rm(udata2)
 rm(udata_temp)
 
 clep <- c()
-for (i in 0:lev){
+for (i in 1:lev){
   temp <- length(unique(na.omit(udata[[sprintf('level.%d', i)]])))
   clep <- c(clep,rep(i,times=temp))
 }
@@ -333,14 +334,15 @@ df = udata
 #persimlist = lastlist$listn
 # Create a dataframe with all clusters and their identity and similarity percentage 
 #ff = lastlist$dfsum
-ff$level <- clep  #without leaves
+ff$level[1]= 0
+ff$level[2:(length(clep[ff$branch]) +1 )] = clep[ff$branch]  #without leaves
 #clep <- clep
 
 Clus = as.data.frame(matrix(100, ncol = 6, nrow = nrow(ff)))
 names(Clus) = c("ClusterId","Identity","Similarity","Entropy_Id","Entropy_Sim","BS")
 Clus$ClusterId = ff$branch
 Clus$seqnum = ff$len
-Clus$level = c(na.omit(clep))
+Clus$level = c(0,na.omit(clep))
 Clus$Entropy_Id=0
 Clus$Entropy_Sim=0
 for(i in 1:length(ff$branch) ){
@@ -397,12 +399,12 @@ Clus$Topic3=NA
 Clus$Topic3_notA=NA
 Clus$TopicSim=NA
 for (i in 1:nrow(Clus)){
-  Clus$Topic1[i]=as.numeric(names(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep[2:length(clep)],df,flagtic,logFile),3))[1])
-  Clus$Topic2[i]=as.numeric(names(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep[2:length(clep)],df,flagtic,logFile),3))[2])
-  Clus$Topic3[i]=as.numeric(names(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep[2:length(clep)],df,flagtic,logFile),3))[3])
-  Clus$Topic1_notA[i]=as.numeric(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep[2:length(clep)],df,flagtic,logFile),3)[1])
-  Clus$Topic2_notA[i]=as.numeric(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep[2:length(clep)],df,flagtic,logFile),3)[2])
-  Clus$Topic3_notA[i]=as.numeric(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep[2:length(clep)],df,flagtic,logFile),3)[3])
+  Clus$Topic1[i]=as.numeric(names(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep,df,flagtic,logFile),3))[1])
+  Clus$Topic2[i]=as.numeric(names(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep,df,flagtic,logFile),3))[2])
+  Clus$Topic3[i]=as.numeric(names(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep,df,flagtic,logFile),3))[3])
+  Clus$Topic1_notA[i]=as.numeric(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep,df,flagtic,logFile),3)[1])
+  Clus$Topic2_notA[i]=as.numeric(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep,df,flagtic,logFile),3)[2])
+  Clus$Topic3_notA[i]=as.numeric(findTopicsPerCl(AminoCl(Clus$ClusterId[i],clep,df,flagtic,logFile),3)[3])
   if (!is.na(Clus$Topic2[i])){
     Clus$TopicSim[i]=topic_similarity[Clus$Topic1[i],Clus$Topic2[i]]
   }else{
