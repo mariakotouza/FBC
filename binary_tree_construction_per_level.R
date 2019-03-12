@@ -1,5 +1,4 @@
 args <- commandArgs(TRUE)
-args <- c("100", "docword.nytimes", "1", "0")
 source("preprocessing_items_terminal.R")
 
 library("profvis") 

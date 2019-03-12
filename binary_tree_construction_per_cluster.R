@@ -1,3 +1,6 @@
+args <- commandArgs(TRUE)
+source("preprocessing_items_terminal.R")
+
 ############################### Initialization ############################### 
 #change!!
 endper = 100 # Set the percentage, which ends the programm 
