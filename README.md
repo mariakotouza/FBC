@@ -16,4 +16,4 @@ install.packages(c("plyr","dplyr","data.table","stringr","tidyr","entropy","ggpl
 ```
 
 ##  License
-This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  [LICENSE](License.md). Please see LICENSE for more details or visit https://creativecommons.org/licenses/by-nc-sa/4.0/.
+This work is licensed under a Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  [LICENSE](License.md). For more details visit https://creativecommons.org/licenses/by-nc-sa/4.0/.
